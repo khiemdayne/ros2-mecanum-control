@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot name="robot" xmlns:xacro="http://wiki.ros.org/xacro">
+<!-- <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mecanum_robot"> -->
+
+  <xacro:arg name="robot_type" default="omni"/>
+  <xacro:property name="type" value="$(arg robot_type)" />
+
+  <xacro:property name="base_size_x" value="05.25" />
+  <xacro:property name="base_size_y" value="0.15" />
+  <xacro:property name="base_size_z" value="0.005" />
+  <xacro:property name="base_mass" value="0.5" />
+  
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertia ixx="${m*(y*y+z*z)/12}" ixy="0" ixz="0"
+             iyy="${m*(x*x+z*z)/12}" iyz="0"
+             izz="${m*(x*x+z*z)/12}"
+    />
+  <!-- include file -->
+  <xacro:include filename="$(find mecanum_description)/urdf/base.xacro"/>
+  <xacro:include filename="$(find mecanum_description)/urdf/wheel.xacro"/>
+  <!-- <xacro:include filename="$(find mecanum_description)/ros2_control/mecanum_ros2_control.xacro"/> -->
+
+
+  <!-- parameters wheel -->
+
+
+  <link name="base_footprint" />
+
+  <!-- parameters base_link -->
+  <xacro:robot_base parent="base_footprint" child="base" xyz="0 0 0.075" rpy="0 0 0" />
+
+
+  <xacro:wheel parent="base" child="fl" xyz="0.10 0.10 -0.04" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+  <xacro:wheel parent="base" child="fr" xyz="0.10 -0.10 -0.04" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+  <xacro:wheel parent="base" child="rl" xyz="-0.10 0.10 -0.04" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+  <xacro:wheel parent="base" child="rr" xyz="-0.10 -0.10 -0.04" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+
+  <!-- <xacro:mecanum_ros2_control name="mecanum_robot" use_mock_hardware="true"/> -->
+  
+</robot>

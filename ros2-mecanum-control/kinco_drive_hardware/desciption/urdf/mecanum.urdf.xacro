@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- <robot name="robot" xmlns:xacro="http://wiki.ros.org/xacro"> -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mecanum_robot">
+
+  <xacro:arg name="robot_type" default="omni"/>
+  <xacro:include filename="$(find kinco_drive_hardware)/description/urdf/base.xacro"/>
+  <xacro:include filename="$(find kinco_drive_hardware)/description/urdf/wheel.xacro"/>
+
+  <link name="world_link" />
+
+  <xacro:robot_base parent="world_link" child="base_link" xyz="0 0 0.075" rpy="0 0 0" />
+
+  <xacro:wheel parent="base_link" child="front_left_wheel" xyz="0.10 0.10 -0.04" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+  <xacro:wheel parent="base_link" child="front_right_wheel" xyz="0.10 -0.10 -0.04" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+  <xacro:wheel parent="base_link" child="back_left_wheel" xyz="-0.10 0.10 -0.04" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+  <xacro:wheel parent="base_link" child="back_right_wheel" xyz="-0.10 -0.10 -0.04" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+
+  <xacro:arg name="use_mock_hardware" default="false" />
+
+  <xacro:diffbot prefix="$(arg prefix)" />
+
+  <xacro:mecanum_ros2_control
+    name="mecanum_robot" use_mock_hardware="$(arg use_mock_hardware)"/>
+</robot>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="mecanum_ros2_control" params="name use_mock_hardware">
+
+    <ros2_control name="${name}" type="system">
+      <xacro:unless value="${use_mock_hardware}">
+        <hardware>
+          <plugin>mecanumbot_hardware/MecanumbotHardware</plugin>
+          <!-- <param name="serial_port">/dev/ttyACM0</param> -->
+        </hardware>
+      </xacro:unless>
+
+      <xacro:if value="${use_mock_hardware}">
+        <hardware>
+          <plugin>mecanumbot_hardware/MecanumbotHardware</plugin>
+          <!-- <param name="serial_port">/dev/ttyACM0</param> -->
+        </hardware>
+      </xacro:if>
+      <joint name="fl_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <param name="motor_id">1</param>
+      </joint>
+      <joint name="fr_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <param name="motor_id">2</param>
+      </joint>
+      <joint name="rl_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <param name="motor_id">3</param>
+      </joint>
+      <joint name="rr_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+        <param name="motor_id">4</param>
+      </joint>
+    </ros2_control>
+
+  </xacro:macro>
+
+</robot>

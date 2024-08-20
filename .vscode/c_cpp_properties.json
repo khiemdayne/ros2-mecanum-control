@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "${default}",
+                "limitSymbolsToIncludedHeaders": false
+            },
+            "includePath": [
+                "/opt/ros/humble/include/**",
+                "/usr/include/**",
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/mecanumbot_controller/include/**",
+                "${workspaceFolder}/polygon_plugins/**",
+                "${workspaceFolder}/ros2_control_mecannum/mecanum_controller/include/mecanum_controller/**",
+                "${workspaceFolder}/ros2_control_mecannum/mecanum_controller/**",
+                "${workspaceFolder}/ros2_control_mecannum/mecanum_hardware/**",
+                "${workspaceFolder}/pluginlib_tutorials/**",
+                "${workspaceFolder}/mecanum_controller/**",
+                
+                // "${workspaceFolder}/kinco_drive_hardware/**"
+                "${workspaceFolder}/kinco_drive_hardware/include/kinco_drive_hardware/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++14"
+        }
+    ],
+    "version": 4
+}

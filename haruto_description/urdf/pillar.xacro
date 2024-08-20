@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="robot_pillar" params="parent child xyz rpy">
+
+    <link name="${child}">
+      <visual>
+        <geometry>
+          <cylinder radius="0.005" length="0.06" />
+        </geometry>
+        <material name="red">
+          <color rgba="1 0.0 0.0 1" />
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="0.005" length="0.06" />
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.1" />
+        <inertia ixx="0.015" ixy="0" ixz="0" iyy="0.0375" iyz="0.0" izz="0.0275" />
+      </inertial>
+    </link>
+
+    <joint name="${parent}_to_${child}_joint" type="fixed">
+      <origin xyz="${xyz}" rpy="${rpy}" />
+      <parent link="${parent}" />
+      <child link="${child}" />
+    </joint>
+
+  </xacro:macro>
+
+</robot>
