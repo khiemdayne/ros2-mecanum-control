@@ -1,5 +1,7 @@
 # ros2-mecanum-bot
 ROS2 Mecanum wheel robot
+# Tai lieu tham khao
+https://github.com/deborggraever/ros2-mecanum-bot.git 
 ## Packages Description
 * mecanum_controller: calculate dynamic
 * mecanum_control:
@@ -16,7 +18,7 @@ This project is build and tested on Ubuntu 22.04 LTS with ROS 2 Humble LTS.
 #### Setup workspace
 ```
 cd src
-git clone https://github.com/deborggraever/ros2-mecanum-bot.git .
+git clone https://github.com/khiemdayne/ros2-mecanum-control.git
 ```
 
 #### Install dependencies
