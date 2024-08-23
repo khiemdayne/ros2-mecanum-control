@@ -16,6 +16,7 @@
                 "${workspaceFolder}/ros2_control_mecannum/mecanum_hardware/**",
                 "${workspaceFolder}/pluginlib_tutorials/**",
                 "${workspaceFolder}/mecanum_controller/**",
+                "${workspaceFolder}/mecanum_hardware/**",
                 
                 // "${workspaceFolder}/kinco_drive_hardware/**"
                 "${workspaceFolder}/kinco_drive_hardware/include/kinco_drive_hardware/**"

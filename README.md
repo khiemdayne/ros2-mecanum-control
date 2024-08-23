@@ -33,7 +33,7 @@ rosdep install --from-paths src --ignore-src --rosdistro humble -r -y
 cd ~/your workspace
 colcon build --symlink-install
 source install/setup.bash
-ros2 launch mecanumbot_control mecanumbot_hardware_launch.py
+ros2 launch mecanum_control mecanum_hardware_launch.py
 ```
 
 ### Run

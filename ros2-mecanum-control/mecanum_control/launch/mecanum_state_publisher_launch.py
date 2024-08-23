@@ -12,7 +12,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
 
     # Get the robot description
-    urdf_path = os.path.join(get_package_share_directory('mecanumbot_description'), 'urdf', 'mecanumbot.urdf')
+    urdf_path = os.path.join(get_package_share_directory('mecanum_description'), 'urdf', 'mecanum.urdf.xacro')
     urdf_doc = xacro.parse(open(urdf_path, 'r'))
     xacro.process_doc(urdf_doc)
     robot_description = urdf_doc.toxml()

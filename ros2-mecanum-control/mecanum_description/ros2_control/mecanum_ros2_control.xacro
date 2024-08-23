@@ -6,15 +6,14 @@
     <ros2_control name="${name}" type="system">
       <xacro:unless value="${use_mock_hardware}">
         <hardware>
-          <plugin>mecanumbot_hardware/MecanumbotHardware</plugin>
+          <plugin>mecanum_hardware/MecanumHardware</plugin>
           <!-- <param name="serial_port">/dev/ttyACM0</param> -->
         </hardware>
       </xacro:unless>
 
       <xacro:if value="${use_mock_hardware}">
         <hardware>
-          <plugin>mecanumbot_hardware/MecanumbotHardware</plugin>
-          <!-- <param name="serial_port">/dev/ttyACM0</param> -->
+          <plugin>mecanum_hardware/MecanumHardware</plugin>
         </hardware>
       </xacro:if>
       <joint name="fl_wheel_joint">
