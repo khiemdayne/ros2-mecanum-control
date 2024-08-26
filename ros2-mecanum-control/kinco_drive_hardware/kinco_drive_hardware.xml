@@ -1,9 +1,0 @@
-<library path="kinco_drive_hardware">
-  <class name="kinco_drive_hardware/KincoDriveHardware"
-         type="kinco_drive_hardware::KincoDriveHardware"
-         base_class_type="hardware_interface::SystemInterface">
-    <description>
-      mecanum hardware
-    </description>
-  </class>
-</library>
