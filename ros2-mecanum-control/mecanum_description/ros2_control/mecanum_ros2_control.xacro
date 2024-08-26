@@ -16,6 +16,7 @@
           <plugin>mecanum_hardware/MecanumHardware</plugin>
         </hardware>
       </xacro:if>
+
       <joint name="fl_wheel_joint">
         <command_interface name="velocity"/>
         <state_interface name="position"/>
@@ -41,7 +42,5 @@
         <param name="motor_id">4</param>
       </joint>
     </ros2_control>
-
   </xacro:macro>
-
 </robot>
