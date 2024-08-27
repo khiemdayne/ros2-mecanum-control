@@ -10,16 +10,12 @@
                 "/usr/include/**",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/mecanumbot_controller/include/**",
-                "${workspaceFolder}/polygon_plugins/**",
-                "${workspaceFolder}/ros2_control_mecannum/mecanum_controller/include/mecanum_controller/**",
-                "${workspaceFolder}/ros2_control_mecannum/mecanum_controller/**",
-                "${workspaceFolder}/ros2_control_mecannum/mecanum_hardware/**",
-                "${workspaceFolder}/pluginlib_tutorials/**",
+                "${workspaceFolder}/mecanum_controller/include/mecanum_controller/**",
                 "${workspaceFolder}/mecanum_controller/**",
                 "${workspaceFolder}/mecanum_hardware/**",
+                "${workspaceFolder}/mecanum_controller/**",
+                "${workspaceFolder}/mecanum_hardware/**"
                 
-                // "${workspaceFolder}/kinco_drive_hardware/**"
-                "${workspaceFolder}/kinco_drive_hardware/include/kinco_drive_hardware/**"
             ],
             "name": "ROS",
             "intelliSenseMode": "gcc-x64",
