@@ -16,6 +16,7 @@
   <!-- include file -->
   <xacro:include filename="$(find mecanum_description)/urdf/base.xacro"/>
   <xacro:include filename="$(find mecanum_description)/urdf/wheel.xacro"/>
+  <xacro:include filename="$(find mecanum_description)/urdf/lidar.xacro"/>
   <xacro:include filename="$(find mecanum_description)/ros2_control/mecanum_ros2_control.xacro"/>
 
 
@@ -35,6 +36,8 @@
   <xacro:wheel parent="base" child="fr" xyz="${base_size_x/2} ${-base_size_y/2} ${-wheel_radius}" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
   <xacro:wheel parent="base" child="rl" xyz="${-base_size_x/2} ${base_size_y/2} ${-wheel_radius}" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
   <xacro:wheel parent="base" child="rr" xyz="${-base_size_x/2} ${-base_size_y/2} ${-wheel_radius}" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+
+  <xacro:lidar parent="base" child="lidar" xyz="0.04 0.0 0.035" rpy="0 0 0" />
 
   <xacro:mecanum_ros2_control name="mecanum_robot" use_mock_hardware="true"/>
   
