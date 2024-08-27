@@ -1,4 +1,5 @@
 
+#include "hardware_interface/lexical_casts.hpp"
 #include <hardware_interface/types/hardware_interface_type_values.hpp>
 #include <pluginlib/class_list_macros.hpp>
 #include <rclcpp/rclcpp.hpp>
@@ -17,12 +18,12 @@ using namespace mecanum_hardware;
 
 hardware_interface::CallbackReturn MecanumHardware::on_init(const hardware_interface::HardwareInfo & hardware_info)
 {
+    RCLCPP_INFO(rclcpp::get_logger("Hardware init"), "Mecanum hardware initting....");
     hardware_interface::CallbackReturn baseResult = hardware_interface::SystemInterface::on_init(hardware_info);
     if (baseResult != hardware_interface::CallbackReturn::SUCCESS) {
         return baseResult;
     }
 
-    serial_port_name_ = info_.hardware_parameters["serial_port"];
     motor_ids_.resize(info_.joints.size());
     position_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     velocity_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -63,16 +64,17 @@ hardware_interface::CallbackReturn MecanumHardware::on_init(const hardware_inter
         RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "%s mapped to motor %d", info_.joints[i].name.c_str(), motor_ids_[i]);
     }
 
+    RCLCPP_INFO(rclcpp::get_logger("Hardware init"), "Mecanum hardware init successfully!!");
     return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface> MecanumHardware::export_state_interfaces()
 {
-    RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "export_state_interfaces");
+    RCLCPP_INFO(rclcpp::get_logger("Hardware export state"), "export_state_interfaces");
 
     std::vector<hardware_interface::StateInterface> state_interfaces;
     for (size_t i = 0; i < info_.joints.size(); i++) {
-        RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Adding position state interface: %s", info_.joints[i].name.c_str());
+        RCLCPP_INFO(rclcpp::get_logger("Hardware export state"), "Adding position state interface: %s", info_.joints[i].name.c_str());
         state_interfaces.emplace_back(
             hardware_interface::StateInterface(
                 info_.joints[i].name, hardware_interface::HW_IF_POSITION, &position_states_[i]
@@ -80,7 +82,7 @@ std::vector<hardware_interface::StateInterface> MecanumHardware::export_state_in
         );
     }
     for (size_t i = 0; i < info_.joints.size(); i++) {
-        RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Adding velocity state interface: %s", info_.joints[i].name.c_str());
+        RCLCPP_INFO(rclcpp::get_logger("Hardware export state"), "Adding velocity state interface: %s", info_.joints[i].name.c_str());
         state_interfaces.emplace_back(
             hardware_interface::StateInterface(
                 info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &velocity_states_[i]
@@ -92,11 +94,11 @@ std::vector<hardware_interface::StateInterface> MecanumHardware::export_state_in
 
 std::vector<hardware_interface::CommandInterface> MecanumHardware::export_command_interfaces()
 {
-    RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "export_command_interfaces");
+    RCLCPP_INFO(rclcpp::get_logger("Hardware export cmd"), "export_command_interfaces");
 
     std::vector<hardware_interface::CommandInterface> command_interfaces;
     for (size_t i = 0; i < info_.joints.size(); i++) {
-        RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Adding velocity command interface: %s", info_.joints[i].name.c_str());
+        RCLCPP_INFO(rclcpp::get_logger("Hardware export cmd"), "Adding velocity command interface: %s", info_.joints[i].name.c_str());
         command_interfaces.emplace_back(
             hardware_interface::CommandInterface(
                 info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &velocity_commands_[i]
@@ -108,7 +110,12 @@ std::vector<hardware_interface::CommandInterface> MecanumHardware::export_comman
 
 hardware_interface::CallbackReturn MecanumHardware::on_activate(const rclcpp_lifecycle::State & previous_state)
 {
-    RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Mecanum hardware starting ...");
+    RCLCPP_INFO(rclcpp::get_logger("Hardware active"), "Mecanum hardware starting ...");
+
+    // for (auto i = 0; i < hw_start_sec_; i++)
+    // {
+    // rclcpp::sleep_for(std::chrono::seconds(1));
+    // RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "%.1f seconds left...", hw_start_sec_ - i);}
 
     for (size_t i = 0; i < info_.joints.size(); i++) {
         if (std::isnan(position_states_[i])) {
@@ -123,40 +130,40 @@ hardware_interface::CallbackReturn MecanumHardware::on_activate(const rclcpp_lif
         velocity_commands_saved_[i] = velocity_commands_[i];
     }
 
-    serial_port_ = std::make_shared<MecanumSerialPort>();
-    if (serial_port_->open(serial_port_name_) != return_type::SUCCESS) {
-        RCLCPP_WARN(rclcpp::get_logger("MecanumHardware"), "Mecanum hardware failed to open serial port");
-        return hardware_interface::CallbackReturn::SUCCESS;
-    }
+    // serial_port_ = std::make_shared<MecanumSerialPort>();
+    // if (serial_port_->open(serial_port_name_) != return_type::SUCCESS) {
+    //     RCLCPP_WARN(rclcpp::get_logger("MecanumHardware"), "Mecanum hardware failed to open serial port");
+    //     return hardware_interface::CallbackReturn::SUCCESS;
+    // }
 
-    RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Mecanum hardware started");
+    RCLCPP_INFO(rclcpp::get_logger("Hardware active"), "Mecanum hardware started successfully!");
     return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 hardware_interface::CallbackReturn MecanumHardware::on_deactivate(const rclcpp_lifecycle::State & previous_state)
 {
-    RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Mecanum hardware stopping ...");
+    RCLCPP_INFO(rclcpp::get_logger("Hardware deactivate"), "Mecanum hardware stopping ...");
 
-    if (serial_port_->is_open()) {
-        serial_port_->close();
-        serial_port_.reset();
-    }
+    // if (serial_port_->is_open()) {
+    //     serial_port_->close();
+    //     serial_port_.reset();
+    // }
 
-    RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Mecanum hardware stopped");
+    RCLCPP_INFO(rclcpp::get_logger("Hardware deactivate"), "Mecanum hardware stop successfully!");
     return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type MecanumHardware::read(const rclcpp::Time & time, const rclcpp::Duration & period)
 {
-    // Make sure we are connected to the serial port
-    if (!serial_port_->is_open()) {
-        RCLCPP_WARN(rclcpp::get_logger("MecanumHardware"), "Mecanum hardware not connected to serial port");
-        return hardware_interface::return_type::ERROR;
+    RCLCPP_INFO(rclcpp::get_logger("Hardware read"), "Reading data...");
+    for(std::size_t i = 0; i < velocity_commands_.size(); i++)
+    {
+        position_states_[i] = position_states_[i] + period.seconds() * velocity_states_[i];
     }
 
     // We currently have an ack response, so read the frames
-    std::vector<SerialHdlcFrame> frames;
-    serial_port_->read_frames(frames);
+    // std::vector<SerialHdlcFrame> frames;
+    // serial_port_->read_frames(frames);
 
     /*
     for (size_t i = 0; i < frames.size(); i++) {
@@ -171,44 +178,32 @@ hardware_interface::return_type MecanumHardware::read(const rclcpp::Time & time,
     */
 
     for (size_t i = 0; i < info_.joints.size(); i++) {
-        //RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Got position %.5f, velocity %.5f for joint %d!", position_states_[i], velocity_states_[i], i);
+        // RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Got position %.5f, velocity %.5f for joint %s!", position_states_[i], 
+        // velocity_states_[i], info_.joints[i].name.c_str());
     }
-    position_states_[0] = 1.1f;
+    // position_states_[0] = 1.1f;
+    RCLCPP_INFO(rclcpp::get_logger("Hardware read"), "Reading data successfully!");
     return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type MecanumHardware::write(const rclcpp::Time & time, const rclcpp::Duration & period)
 {
-    for (size_t i = 0; i < info_.joints.size(); i++) {
-        // Only send motor commands if the velocity changed
-        if (velocity_commands_[i] != velocity_commands_saved_[i]) {
+  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
+  RCLCPP_INFO(rclcpp::get_logger("Hardware write"), "Writing data...");
+  for (auto i = 0u; i < velocity_commands_.size(); i++)
+  {
+    // RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Motor velocity changed: %.5f", velocity_commands_[i]);
+    // Simulate sending commands to the hardware
+    // RCLCPP_INFO(
+    //   rclcpp::get_logger("DiffBotSystemHardware"), "Got command %.5f for '%s'!", velocity_commands_[i],
+    //   info_.joints[i].name.c_str());
 
-            RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Motor velocity changed: %.5f", velocity_commands_[i]);
+    velocity_states_[i] = velocity_commands_[i];
+  }
+  RCLCPP_INFO(rclcpp::get_logger("Hardware write"), "Written successfully!");
+  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-            // Generate the motor command message
-            uint16_t duty = 0;
-            uint8_t message[6];
-            message[0] = (uint8_t)DeviceCommand::MotorSetDuty;
-            message[1] = 4; // Payload len
-            message[2] = motor_ids_[i];
-            if (velocity_commands_[i] >= 0.0) {
-                duty = (uint16_t)(velocity_commands_[i]);
-                message[3] = (uint8_t)DeviceMotorDirection::Forward;
-            } else {
-                duty = (uint16_t)(-velocity_commands_[i]);
-                message[3] = (uint8_t)DeviceMotorDirection::Reverse;
-            }
-            message[4] = (uint8_t)(duty & 0xFF);
-            message[5] = (uint8_t)((duty >> 8) & 0xFF);
-
-            // Send the motor command
-            if (serial_port_->is_open()) {
-                serial_port_->write_frame(message, 6);
-            }
-
-            // Store the current velocity
-            velocity_commands_saved_[i] = velocity_commands_[i];
-        }
-    }
-    return hardware_interface::return_type::OK;
+  return hardware_interface::return_type::OK;
 }
+
+

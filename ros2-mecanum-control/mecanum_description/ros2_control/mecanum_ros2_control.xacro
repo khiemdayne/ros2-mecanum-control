@@ -14,6 +14,8 @@
       <xacro:if value="${use_mock_hardware}">
         <hardware>
           <plugin>mecanum_hardware/MecanumHardware</plugin>
+          <param name="example_param_hw_start_duration_sec">0</param>
+          <param name="example_param_hw_stop_duration_sec">3.0</param>
         </hardware>
       </xacro:if>
 

@@ -1,7 +1,15 @@
-# ros2-mecanum-bot
-ROS2 Mecanum wheel robot
+# Ros2 Mecanum control
+This package offers a controller module designed to oversee a mecanum wheel platform utilizing the ROS2 Control framework.
+Presently, the controller is optimized for a mecanum platform equipped with four wheels, although this specification could evolve in the coming times.
+
+The underlying architecture of the controller draws from the principles of the [differential drive](https://github.com/ros-controls/ros2_controllers/tree/master/diff_drive_controller) controller.
+
+$~$
+
+
 # Tai lieu tham khao
-https://github.com/deborggraever/ros2-mecanum-bot.git 
+* https://github.com/deborggraever/ros2-mecanum-bot.git 
+* https://github.com/roboTHIx/mecanum_controller.git
 ## Packages Description
 * mecanum_controller: calculate dynamic
 * mecanum_control:
@@ -40,7 +48,7 @@ ros2 launch mecanum_control mecanum_hardware_launch.py
 ```
 ros2 control list_hardware_interfaces
 ```
-You can see
+#### You can see any some
 ```
 command interfaces
 	fl_wheel_joint/velocity [unavailable] [unclaimed]
@@ -56,4 +64,17 @@ state interfaces
 	rl_wheel_joint/velocity
 	rr_wheel_joint/position
 	rr_wheel_joint/velocity
+```
+### Open new terminal and run to control robot
+```
+ros2 topic pub --rate 10 mecanum_controller/cmd_vel geometry_msgs/msg/TwistStamped "
+    twist:
+      linear:
+        x: 0.7
+        y: 0.0
+        z: 0.0
+      angular:
+        x: 0.0
+        y: 0.0
+        z: 1.0"
 ```

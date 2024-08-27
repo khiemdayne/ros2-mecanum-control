@@ -17,6 +17,8 @@ find_package(rclcpp REQUIRED)
 install(
   DIRECTORY
     launch
+    config
+    rviz
   DESTINATION share/${PROJECT_NAME}
 )
 add_executable(mecanum_control_node

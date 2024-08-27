@@ -20,10 +20,10 @@ def generate_launch_description():
     xacro.process_doc(urdf_doc)
     robot_description = urdf_doc.toxml()
 
-    robot_controller_config = os.path.join(get_package_share_directory('mecanum_description'), 'config', 'robot_controller_config.yaml')
+    robot_controller_config = os.path.join(get_package_share_directory('mecanum_control'), 'config', 'robot_controller_config.yaml')
 
     rviz_config_dir = os.path.join(
-        get_package_share_directory('mecanum_description'),
+        get_package_share_directory('mecanum_control'),
         'rviz',
         'model.rviz')
     

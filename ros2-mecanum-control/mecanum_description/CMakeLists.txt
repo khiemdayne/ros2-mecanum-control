@@ -12,7 +12,6 @@ find_package(xacro REQUIRED)
 
 install(
   DIRECTORY
-    config
     launch
     ros2_control
     rviz

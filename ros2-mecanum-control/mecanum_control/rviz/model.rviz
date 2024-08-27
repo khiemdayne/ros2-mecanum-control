@@ -5,6 +5,10 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /TF1
+        - /TF1/Frames1
+        - /TF1/Tree1
+        - /TF1/Tree1/odom1
       Splitter Ratio: 0.5
     Tree Height: 608
   - Class: rviz_common/Selection
@@ -109,6 +113,8 @@ Visualization Manager:
           Value: true
         fr_wheel_link:
           Value: true
+        odom:
+          Value: true
         rl_wheel_link:
           Value: true
         rr_wheel_link:
@@ -117,24 +123,25 @@ Visualization Manager:
       Name: TF
       Show Arrows: true
       Show Axes: true
-      Show Names: false
+      Show Names: true
       Tree:
-        base_footprint:
-          base_link:
-            fl_wheel_link:
-              {}
-            fr_wheel_link:
-              {}
-            rl_wheel_link:
-              {}
-            rr_wheel_link:
-              {}
+        odom:
+          base_footprint:
+            base_link:
+              fl_wheel_link:
+                {}
+              fr_wheel_link:
+                {}
+              rl_wheel_link:
+                {}
+              rr_wheel_link:
+                {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: base_footprint
+    Fixed Frame: odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -192,10 +199,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6003981828689575
+      Pitch: 1.3953964710235596
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.6535723209381104
+      Yaw: 3.0085713863372803
     Saved: ~
 Window Geometry:
   Displays:
@@ -211,5 +218,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1200
-  X: 20
-  Y: 64
+  X: 221
+  Y: 112

@@ -5,9 +5,11 @@
   <xacro:arg name="robot_type" default="omni"/>
   <xacro:property name="type" value="$(arg robot_type)" />
 
-  <xacro:property name="base_size_x" value="1.560" />
-  <xacro:property name="base_size_y" value="0.931" />
-  <xacro:property name="base_size_z" value="0.05" />
+  <!-- <xacro:property name="base_size_x" value="1.560" />
+  <xacro:property name="base_size_y" value="0.931" /> -->
+  <xacro:property name="base_size_x" value="0.25" />
+  <xacro:property name="base_size_y" value="0.15" />
+  <xacro:property name="base_size_z" value="0.005" />
   <xacro:property name="base_mass" value="0.5" />
   
 
@@ -18,19 +20,21 @@
 
 
   <!-- parameters wheel -->
-  <xacro:property name="wheel_radius" value="0.203" />
-  <xacro:property name="wheel_lenght" value="0.05" />
+  <xacro:property name="wheel_radius" value="0.0375" />
+  <xacro:property name="wheel_lenght" value="0.04" />
+  <!-- <xacro:property name="wheel_radius" value="0.203" />
+  <xacro:property name="wheel_lenght" value="0.05" /> -->
 
   <link name="base_footprint" />
 
   <!-- parameters base_link -->
-  <xacro:robot_base parent="base_footprint" child="base" xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
+  <xacro:robot_base parent="base_footprint" child="base" xyz="0 0 ${wheel_radius*2}" rpy="0 0 0" />
 
 
-  <xacro:wheel parent="base" child="fl" xyz="${base_size_x/2} ${base_size_y/2} 0" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
-  <xacro:wheel parent="base" child="fr" xyz="${base_size_x/2} ${-base_size_y/2} 0" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
-  <xacro:wheel parent="base" child="rl" xyz="${-base_size_x/2} ${base_size_y/2} 0" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
-  <xacro:wheel parent="base" child="rr" xyz="${-base_size_x/2} ${-base_size_y/2} 0" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+  <xacro:wheel parent="base" child="fl" xyz="${base_size_x/2} ${base_size_y/2} ${-wheel_radius}" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+  <xacro:wheel parent="base" child="fr" xyz="${base_size_x/2} ${-base_size_y/2} ${-wheel_radius}" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+  <xacro:wheel parent="base" child="rl" xyz="${-base_size_x/2} ${base_size_y/2} ${-wheel_radius}" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
+  <xacro:wheel parent="base" child="rr" xyz="${-base_size_x/2} ${-base_size_y/2} ${-wheel_radius}" rpy="1.57 0 0" robot_type="$(arg robot_type)" />
 
   <xacro:mecanum_ros2_control name="mecanum_robot" use_mock_hardware="true"/>
   
