@@ -107,7 +107,7 @@ mecanum_controller:
   }
   base_frame_id: {
     type: string,
-    default_value: "base_link",
+    default_value: "base_footprint",
     description: "Name of the robot's base frame that is child of the odometry frame.",
   }
 
