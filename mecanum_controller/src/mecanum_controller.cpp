@@ -195,10 +195,29 @@ controller_interface::return_type MecanumController::update(const rclcpp::Time &
     // Odometry
     if (_params.open_loop)
     {
+        // RCLCPP_ERROR(
+        //   logger, "time is %2f .", _previous_update_timestamp);
+        //   RCLCPP_ERROR(
+        //   logger, "fl is %2f .", front_left_velocity);
+        //   RCLCPP_ERROR(
+        //   logger, "fr is %2f .", front_right_velocity);
+        //   RCLCPP_ERROR(
+        //   logger, "rl is %2f .", rear_left_velocity);
+        //   RCLCPP_ERROR(
+        //   logger, "rr is %2f .", rear_right_velocity);
         _odometry.updateFromVelocity(front_left_velocity, front_right_velocity, rear_left_velocity, rear_right_velocity, time);
     }
     else
     {
+        // RCLCPP_ERROR(logger, "time is %2f .", _previous_update_timestamp);
+        // RCLCPP_ERROR(
+        //   logger, "fl is %2f .", front_left_velocity);
+        //   RCLCPP_ERROR(
+        //   logger, "fr is %2f .", front_right_velocity);
+        //   RCLCPP_ERROR(
+        //   logger, "rl is %2f .", rear_left_velocity);
+        //   RCLCPP_ERROR(
+        //   logger, "rr is %2f .", rear_right_velocity);
         const double front_left_feedback  = _registered_front_left_wheel_handle[0].feedback.get().get_value();
         const double front_right_feedback = _registered_front_right_wheel_handle[0].feedback.get().get_value();
         const double rear_left_feedback   = _registered_rear_left_wheel_handle[0].feedback.get().get_value();

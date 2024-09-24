@@ -1,4 +1,5 @@
 #include "mecanum_controller/odometry.hpp"
+#include "mecanum_controller/mecanum_controller.hpp"
 
 
 namespace mecanum_controller
@@ -162,11 +163,14 @@ void Odometry::integrateExact(double linear_x, double linear_y, double angular_z
         direction = atan2(linear_y, linear_x);
     }
 
-    const double linear_magnitude = sqrt(linear_x * linear_x + linear_y + linear_y);
-
+    const double linear_magnitude = sqrt(linear_x * linear_x + linear_y * linear_y);
+    RCLCPP_ERROR(rclcpp::get_logger("khyemnguyen"), "x %2f .", linear_x);
+    RCLCPP_ERROR(rclcpp::get_logger("khyemnguyen"), "y %2f .", linear_y);
     _x       += linear_magnitude * cos(angular_z / 2.0 + direction + _heading);
     _y       += linear_magnitude * sin(angular_z / 2.0 + direction + _heading);
     _heading += angular_z;
+    RCLCPP_ERROR(rclcpp::get_logger("khyemnguyen"), "_x %2f .", _x);
+    RCLCPP_ERROR(rclcpp::get_logger("khyemnguyen"), "_y %2f .", _y);
 }
 
 void Odometry::resetAccumulators()

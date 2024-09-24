@@ -31,7 +31,7 @@ mecanum_controller:
     rear_left_wheel_radius_multiplier: 1.0
     rear_right_wheel_radius_multiplier: 1.0
 
-    tf_frame_prefix_enable: true
+    tf_frame_prefix_enable: false
     tf_frame_prefix: RTC_mecanum
 
 

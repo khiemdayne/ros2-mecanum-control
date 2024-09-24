@@ -23,6 +23,8 @@ hardware_interface::CallbackReturn MecanumHardware::on_init(const hardware_inter
     if (baseResult != hardware_interface::CallbackReturn::SUCCESS) {
         return baseResult;
     }
+    hw_start_sec_ = 0;
+    hw_stop_sec_ = 3.0;
 
     motor_ids_.resize(info_.joints.size());
     position_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -98,7 +100,7 @@ std::vector<hardware_interface::CommandInterface> MecanumHardware::export_comman
 
     std::vector<hardware_interface::CommandInterface> command_interfaces;
     for (size_t i = 0; i < info_.joints.size(); i++) {
-        RCLCPP_INFO(rclcpp::get_logger("Hardware export cmd"), "Adding velocity command interface: %s", info_.joints[i].name.c_str());
+        // RCLCPP_INFO(rclcpp::get_logger("Hardware export cmd"), "Adding velocity command interface: %s", info_.joints[i].name.c_str());
         command_interfaces.emplace_back(
             hardware_interface::CommandInterface(
                 info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &velocity_commands_[i]
@@ -110,98 +112,72 @@ std::vector<hardware_interface::CommandInterface> MecanumHardware::export_comman
 
 hardware_interface::CallbackReturn MecanumHardware::on_activate(const rclcpp_lifecycle::State & previous_state)
 {
-    RCLCPP_INFO(rclcpp::get_logger("Hardware active"), "Mecanum hardware starting ...");
+    // RCLCPP_INFO(rclcpp::get_logger("Hardware active"), "Mecanum hardware starting ...");
 
-    // for (auto i = 0; i < hw_start_sec_; i++)
-    // {
-    // rclcpp::sleep_for(std::chrono::seconds(1));
-    // RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "%.1f seconds left...", hw_start_sec_ - i);}
+    for (auto i = 0; i < hw_start_sec_; i++)
+    {
+    rclcpp::sleep_for(std::chrono::seconds(1));
+    RCLCPP_INFO(rclcpp::get_logger("DiffBotSystemHardware"), "%.1f seconds left...", hw_start_sec_ - i);}
+
 
     for (size_t i = 0; i < info_.joints.size(); i++) {
         if (std::isnan(position_states_[i])) {
             position_states_[i] = 0.0f;
+            velocity_states_[i] = 0.0f;
+            velocity_commands_[i] = 0.0f;
         }
         if (std::isnan(velocity_states_[i])) {
-            velocity_states_[i] = 0.0f;
         }
         if (std::isnan(velocity_commands_[i])) {
-            velocity_commands_[i] = 0.0f;
         }
         velocity_commands_saved_[i] = velocity_commands_[i];
     }
 
-    // serial_port_ = std::make_shared<MecanumSerialPort>();
-    // if (serial_port_->open(serial_port_name_) != return_type::SUCCESS) {
-    //     RCLCPP_WARN(rclcpp::get_logger("MecanumHardware"), "Mecanum hardware failed to open serial port");
-    //     return hardware_interface::CallbackReturn::SUCCESS;
-    // }
 
-    RCLCPP_INFO(rclcpp::get_logger("Hardware active"), "Mecanum hardware started successfully!");
     return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 hardware_interface::CallbackReturn MecanumHardware::on_deactivate(const rclcpp_lifecycle::State & previous_state)
 {
-    RCLCPP_INFO(rclcpp::get_logger("Hardware deactivate"), "Mecanum hardware stopping ...");
-
-    // if (serial_port_->is_open()) {
-    //     serial_port_->close();
-    //     serial_port_.reset();
-    // }
-
-    RCLCPP_INFO(rclcpp::get_logger("Hardware deactivate"), "Mecanum hardware stop successfully!");
+  for (auto i = 0; i < hw_stop_sec_; i++)
+  {
+    rclcpp::sleep_for(std::chrono::seconds(1));
+    // RCLCPP_INFO(
+    //   rclcpp::get_logger("Hardware deactivate"), "%.1f seconds left...", hw_stop_sec_ - i);
+  }
+    // RCLCPP_INFO(rclcpp::get_logger("Hardware deactivate"), "Mecanum hardware stop successfully!");
     return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type MecanumHardware::read(const rclcpp::Time & time, const rclcpp::Duration & period)
 {
-    RCLCPP_INFO(rclcpp::get_logger("Hardware read"), "Reading data...");
+    // RCLCPP_INFO(rclcpp::get_logger("Hardware read"), "Reading data...");
     for(std::size_t i = 0; i < velocity_commands_.size(); i++)
     {
         position_states_[i] = position_states_[i] + period.seconds() * velocity_states_[i];
+        // RCLCPP_INFO(rclcpp::get_logger("Hardware read"), "got position state %.5f and velocity state %.5f for '%s'!", position_states_[i], velocity_states_[i], info_.joints[i].name.c_str());
     }
 
-    // We currently have an ack response, so read the frames
-    // std::vector<SerialHdlcFrame> frames;
-    // serial_port_->read_frames(frames);
-
-    /*
-    for (size_t i = 0; i < frames.size(); i++) {
-        char buff[100];
-        int offset = 0;
-        for (size_t l = 0; l < frames[i].length; l++) {
-            sprintf(&buff[offset], "%02X ", frames[i].data[l]);
-            offset += 3;
-        }
-        RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Frame received: %s", buff);
-    }
-    */
-
-    for (size_t i = 0; i < info_.joints.size(); i++) {
-        // RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Got position %.5f, velocity %.5f for joint %s!", position_states_[i], 
-        // velocity_states_[i], info_.joints[i].name.c_str());
-    }
-    // position_states_[0] = 1.1f;
-    RCLCPP_INFO(rclcpp::get_logger("Hardware read"), "Reading data successfully!");
+    // RCLCPP_INFO(rclcpp::get_logger("Hardware read"), "Reading data successfully!");
     return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type MecanumHardware::write(const rclcpp::Time & time, const rclcpp::Duration & period)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  RCLCPP_INFO(rclcpp::get_logger("Hardware write"), "Writing data...");
+//   RCLCPP_INFO(rclcpp::get_logger("Hardware write"), "Writing data...");
   for (auto i = 0u; i < velocity_commands_.size(); i++)
   {
-    // RCLCPP_INFO(rclcpp::get_logger("MecanumHardware"), "Motor velocity changed: %.5f", velocity_commands_[i]);
-    // Simulate sending commands to the hardware
+    // RCLCPP_INFO(rclcpp::get_logger("MecanumHardware write"), "Motor velocity changed: %.5f", velocity_commands_[i]);
+    // // Simulate sending commands to the hardware
     // RCLCPP_INFO(
-    //   rclcpp::get_logger("DiffBotSystemHardware"), "Got command %.5f for '%s'!", velocity_commands_[i],
+    //   rclcpp::get_logger("MecanumHardware write"), "Got command %.5f for '%s'!", velocity_commands_[i],
     //   info_.joints[i].name.c_str());
 
     velocity_states_[i] = velocity_commands_[i];
   }
-  RCLCPP_INFO(rclcpp::get_logger("Hardware write"), "Written successfully!");
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
+//   RCLCPP_INFO(rclcpp::get_logger("Hardware write"), "Written successfully!");
+
 
   return hardware_interface::return_type::OK;
 }
